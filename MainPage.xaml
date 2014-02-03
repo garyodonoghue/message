@@ -31,10 +31,17 @@
         <Grid x:Name="ContentPanel" Margin="37,151,-13,10" Grid.RowSpan="2">
             <toolkit:AutoCompleteBox Height="80" HorizontalAlignment="Left" Margin="-3,45,0,0" Name="autoCompleteBox1" VerticalAlignment="Top" Width="403" />
             <TextBox x:Name="_Message" HorizontalAlignment="Left" Height="183" Margin="0,163,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="400"/>
-            <Button Content="Send SMS" HorizontalAlignment="Left" Margin="10,485,0,0" VerticalAlignment="Top" RenderTransformOrigin="-2.771,3.566" Width="353" Click="Button_Click_2"/>
+            <Button x:Name="sendBtn" Content="Send SMS" HorizontalAlignment="Left" Margin="10,485,0,0" VerticalAlignment="Top" RenderTransformOrigin="-2.771,3.566" Width="353" Click="sendClick"/>
             <TextBlock HorizontalAlignment="Left" Margin="10,15,0,0" TextWrapping="Wrap" Text="To:" VerticalAlignment="Top" Height="41" RenderTransformOrigin="0.519,1.374" Width="73"/>
             <TextBlock HorizontalAlignment="Left" Margin="10,141,0,0" TextWrapping="Wrap" Text="Message:" VerticalAlignment="Top" Height="41" RenderTransformOrigin="0.519,1.374" Width="91"/>
             <Image x:Name="captchaImage" HorizontalAlignment="Left" Height="100" Margin="10,346,0,0" VerticalAlignment="Top" Width="390"/>
+            <TextBlock x:Name="problemVar1" HorizontalAlignment="Left" Margin="88,426,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="54" RenderTransformOrigin="0.519,1.374" Width="54" FontSize="24"/>
+            <TextBox x:Name="resultTxt" HorizontalAlignment="Left" Height="72" Margin="269,408,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="94" InputScope="Number"/>
+            <TextBlock x:Name="problemVar2" HorizontalAlignment="Left" Margin="193,426,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="54" RenderTransformOrigin="0.519,1.374" Width="46" FontSize="24"/>
+            <TextBlock x:Name="equals" HorizontalAlignment="Left" Margin="244,408,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="41" RenderTransformOrigin="0.519,1.374" Width="62" Text="=" FontSize="36"/>
+            <TextBlock x:Name="multiply" HorizontalAlignment="Left" Margin="147,426,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="41" RenderTransformOrigin="0.519,1.374" Width="46" Text="X" FontSize="24"/>
+            <TextBlock HorizontalAlignment="Left" Margin="10,362,0,0" TextWrapping="Wrap" Text="Solve this problem:" VerticalAlignment="Top" Height="41" RenderTransformOrigin="0.519,1.374" Width="183"/>
+            <TextBlock x:Name="wrong" HorizontalAlignment="Left" Margin="129,556,0,0" TextWrapping="Wrap" Text="WRONG!" VerticalAlignment="Top" Height="41" RenderTransformOrigin="0.519,1.374" Width="271" FontSize="24" Foreground="#FFFE0000" Visibility="Collapsed"/>
         </Grid>
     </Grid>
  

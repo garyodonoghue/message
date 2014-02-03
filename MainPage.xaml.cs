@@ -22,18 +22,36 @@ namespace DrunkyTexty
         Contacts cons;
         IEnumerable<Contact> listCons;
 
+        Style defaultStyle;
+        // These integer variables store the numbers  
+        // for the addition problem.  
+        int var1;
+        int var2;
+
         // Constructor
         public MainPage()
         {
             InitializeComponent();
-            getContacts();
+            
+            defaultStyle = sendBtn.Style;
 
-            generateCaptcha();
+            getContacts();
+            generateProblem();
         }
 
-        private void generateCaptcha()
+        private void generateProblem()
         {
-            throw new NotImplementedException();
+            // Create a Random object called randomizer  
+            // to generate random numbers.
+            Random randomizer = new Random();
+            
+            var1 = randomizer.Next(30);
+            var2 = randomizer.Next(30);
+
+            problemVar1.Text = var1.ToString();
+            problemVar2.Text = var2.ToString();
+ 
+
         }
 
         private void getContacts()
@@ -54,66 +72,28 @@ namespace DrunkyTexty
         }
  
 
-        private void Button_Click_2(object sender, RoutedEventArgs e)
+        private void sendClick(object sender, RoutedEventArgs e)
         {
-            SmsComposeTask smsComposeTask = new SmsComposeTask();
+            int correctAnswer = var1 * var2;
 
-            smsComposeTask.To = autoCompleteBox1.Text;
-            smsComposeTask.Body = _Message.Text;
-            smsComposeTask.Show();
-        }
-    }
+            int attempt = Int32.Parse(resultTxt.Text);
 
-    public partial class CImage : System.Web.UI.Page
-    {
-        protected void Page_Load(object sender, EventArgs e)
-        {
-            // Create a random code and store it in the Session object.
-            this.Session["CaptchaImageText"] = GenerateRandomCode();
-            // Create a CAPTCHA image using the text stored in the Session object.
-            RandomImage ci = new RandomImage(this.Session
-                ["CaptchaImageText"].ToString(), 300, 75);
-            // Change the response headers to output a JPEG image.
-            this.Response.Clear();
-            this.Response.ContentType = "image/jpeg";
-            // Write the image to the response stream in JPEG format.
-            ci.Image.Save(this.Response.OutputStream, ImageFormat.Jpeg);
-            // Dispose of the CAPTCHA image object.
-            ci.Dispose();
-        }
-
-        // Function to generate random string with Random class.
-        private string GenerateRandomCode()
-        {
-            Random r = new Random();
-            string s = "";
-            for (int j = 0; j < 5; j++)
+            if (correctAnswer == attempt)
             {
-                int i = r.Next(3);
-                int ch;
-                switch (i)
-                {
-                    case 1:
-                        ch = r.Next(0, 9);
-                        s = s + ch.ToString();
-                        break;
-                    case 2:
-                        ch = r.Next(65, 90);
-                        s = s + Convert.ToChar(ch).ToString();
-                        break;
-                    case 3:
-                        ch = r.Next(97, 122);
-                        s = s + Convert.ToChar(ch).ToString();
-                        break;
-                    default:
-                        ch = r.Next(97, 122);
-                        s = s + Convert.ToChar(ch).ToString();
-                        break;
-                }
-                r.NextDouble();
-                r.Next(100, 1999);
+                sendBtn.Style = (Style)Application.Current.Resources["CorrectAnswer"];
+                wrong.Visibility = Visibility.Collapsed;
+
+                SmsComposeTask smsComposeTask = new SmsComposeTask();
+
+                smsComposeTask.To = autoCompleteBox1.Text;
+                smsComposeTask.Body = _Message.Text;
+                smsComposeTask.Show();
             }
-            return s;
+            else {
+                sendBtn.Style = (Style)Application.Current.Resources["WrongAnswer"];
+                generateProblem();
+                wrong.Visibility = Visibility.Visible;
+            }
         }
     }
 }
