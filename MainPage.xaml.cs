@@ -20,6 +20,7 @@ namespace DrunkyTexty
     public partial class MainPage : PhoneApplicationPage
     {
         Contacts cons;
+        Contacts cons2;
         IEnumerable<Contact> listCons;
 
         Style defaultStyle;
@@ -27,6 +28,7 @@ namespace DrunkyTexty
         // for the addition problem.  
         int var1;
         int var2;
+        private IEnumerable<IEnumerable<ContactPhoneNumber>> smsContact;
 
         // Constructor
         public MainPage()
@@ -76,24 +78,55 @@ namespace DrunkyTexty
         {
             int correctAnswer = var1 * var2;
 
-            int attempt = Int32.Parse(resultTxt.Text);
-
-            if (correctAnswer == attempt)
+            if (resultTxt.Text.Length != 0)
             {
-                sendBtn.Style = (Style)Application.Current.Resources["CorrectAnswer"];
-                wrong.Visibility = Visibility.Collapsed;
+                int attempt = Int32.Parse(resultTxt.Text);
 
-                SmsComposeTask smsComposeTask = new SmsComposeTask();
+                if (correctAnswer == attempt)
+                {
+                    sendBtn.Style = (Style)Application.Current.Resources["CorrectAnswer"];
+                    wrong.Visibility = Visibility.Collapsed;
 
-                smsComposeTask.To = autoCompleteBox1.Text;
-                smsComposeTask.Body = _Message.Text;
-                smsComposeTask.Show();
+                    
+                    listCons.Cast<object>().ToList();
+
+                    cons2 = new Contacts();
+                    //Identify the method that runs after the asynchronous search completes.
+                    cons2.SearchCompleted += new EventHandler<ContactsSearchEventArgs>(SendSMS);
+                    //Start the asynchronous search.
+                    cons2.SearchAsync(String.Empty, FilterKind.None, "Contacts Test #1");
+
+                    
+                }
+                else
+                {
+                    sendBtn.Style = (Style)Application.Current.Resources["WrongAnswer"];
+                    generateProblem();
+                    wrong.Visibility = Visibility.Visible;
+                }
             }
-            else {
-                sendBtn.Style = (Style)Application.Current.Resources["WrongAnswer"];
-                generateProblem();
-                wrong.Visibility = Visibility.Visible;
+        }
+
+        private void SendSMS(object sender, ContactsSearchEventArgs e)
+        {
+            SmsComposeTask smsComposeTask = new SmsComposeTask();
+            cons2.SearchCompleted -= ContactsSearchCompleted;
+
+            foreach (var c in e.Results)
+            {
+                CustomContact contact = new CustomContact();
+                contact.Name = c.DisplayName;
+                if (contact.Name == autoCompleteBox1.Text)
+                {
+                    var number = c.PhoneNumbers.FirstOrDefault(); //change this to whatever number you want
+                    if (number != null)
+                        smsComposeTask.To = number.PhoneNumber;
+                    else
+                        contact.Number = "";
+                }
             }
+            smsComposeTask.Body = _Message.Text;
+            smsComposeTask.Show();
         }
     }
 }
